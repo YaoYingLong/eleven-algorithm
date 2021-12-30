@@ -3,8 +3,8 @@ package algorithm.cm.tree;
 import java.util.Arrays;
 
 public class RedBlackTree {
-    private final int Red = 0; // 红色
-    private final int Black = 1; // 黑色
+    private final int Red = 0;      // 红色
+    private final int Black = 1;    // 黑色
     private class Node {
         int key = -1;       // 数据
         int color = Black;  // 颜色
