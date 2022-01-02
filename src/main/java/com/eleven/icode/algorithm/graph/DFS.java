@@ -50,7 +50,6 @@ public class DFS {
         Scanner cin = new Scanner(System.in);
         int n = 5;
         int m = 4;
-
         int[][] data = new int[n + 1][m + 1];
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= m; j++) {

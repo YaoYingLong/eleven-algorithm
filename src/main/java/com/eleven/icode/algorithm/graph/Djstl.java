@@ -3,23 +3,20 @@ package com.eleven.icode.algorithm.graph;
 import java.util.Scanner;
 
 /**
- *
+ * 迪杰斯特拉Dijkstra算法，单源最短路径算法，它是所有最短路径算法的基础，地图软件最终使用的算法也是以他为基础进行的优化
  */
 public class Djstl {
-
     public static void main(String[] args) {
         int n, m, x; // n表示点数，m表示边数，x表示我们要的七点
         Scanner cin = new Scanner(System.in);
         n = cin.nextInt();
         m = cin.nextInt();
         x = cin.nextInt();
-
         int[][] value = new int[n + 1][n + 1]; // 表示点到点的邻接矩阵
         int[] dis = new int[n + 1]; // 存最短路径的
         for (int i = 1; i <= n; i++) {
             dis[i] = Integer.MAX_VALUE;
-            for (int j = 1; j <= n; j++) {
-                // 初始化我们的地图
+            for (int j = 1; j <= n; j++) {// 初始化地图
                 value[i][j] = -1; // 表示没有路的
                 if (i == j) {
                     value[i][j] = 0;
@@ -37,7 +34,6 @@ public class Djstl {
             }
         }
         seach(x, dis, value, n);
-
     }
 
     public static void seach(int x, int dis[], int value[][], int n) {
@@ -69,7 +65,5 @@ public class Djstl {
         for (int i = 1; i <= n; i++) {
             System.out.println(x + "到 " + i + "的最短路径为 ：" + dis[i]);
         }
-
     }
-
 }
