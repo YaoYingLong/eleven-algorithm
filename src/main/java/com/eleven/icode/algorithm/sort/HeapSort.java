@@ -12,7 +12,7 @@ public class HeapSort {
     public void heapSortAsc(Integer[] arr) {
         int len = arr.length;
         // len / 2 - 1表示的是从完全二叉数中最后一个元素的父节点开始堆化
-        for (int start = len / 2 - 1; start >= 0; start--) {
+        for (int start = (len >> 1) - 1; start >= 0; start--) {
             maxHeapDown(arr, start, len);  // 将树中最大的元素排到堆顶，且每颗子树都是一个
         }
         // 上面的循环只是将最大的元素排到了堆顶，但是整棵树即数组中的元素不是有序的
@@ -30,7 +30,7 @@ public class HeapSort {
      */
     public void maxHeapDown(Integer[] arr, int start, int end) {
         int parent = start;
-        int left = parent * 2 + 1; // 找到当前节点的左子节点位置
+        int left = (parent << 1) + 1; // 找到当前节点的左子节点位置
         while (left < end) {
             int max = left; // max表示左右节点大的那一个在数组中的位置
             if (left + 1 < end && arr[left] < arr[left + 1]) { // 比较左右节点和父节点的大小
@@ -44,14 +44,14 @@ public class HeapSort {
                 arr[parent] = arr[max];
                 arr[max] = tmp;
                 parent = max;   // 还原指针，交换数据后，max指向的是被交换下来的父节点，还需要往下遍历，故需要将parent指向需要遍历的数据
-                left = parent * 2 + 1;  // 找到之前左右节点大的节点的左子节点在数组中的索引位置
+                left = (parent << 1) + 1;  // 找到之前左右节点大的节点的左子节点在数组中的索引位置
             }
         }
     }
 
     public void heapSortDesc(Integer[] arr) {
         int len = arr.length;
-        for (int start = len / 2 - 1; start >= 0; start--) {
+        for (int start = (len >> 1) - 1; start >= 0; start--) {
             minHeapDown(arr, start, len);
         }
 
@@ -65,7 +65,7 @@ public class HeapSort {
 
     public void minHeapDown(Integer[] arr, int start, int end) {
         int parent = start;
-        int left = 2 * start + 1; // 找到当前节点的左子节点位置
+        int left = (start << 1) + 1; // 找到当前节点的左子节点位置
         while (left < end) {
             int min = left; // min表示左右节点小的那一个在数组中的位置
             if (left + 1 < end && arr[left] > arr[left + 1]) {
@@ -78,7 +78,7 @@ public class HeapSort {
             arr[min] = arr[parent];
             arr[parent] = tmp;
             parent = min;   // 还原指针，交换数据后，min指向的是被交换下来的父节点，还需要往下遍历，故需要将parent指向需要遍历的数据
-            left = 2 * parent + 1;  // 找到之前左右节点小的节点的左子节点在数组中的索引位置
+            left = (parent << 1) + 1;  // 找到之前左右节点小的节点的左子节点在数组中的索引位置
         }
     }
 
