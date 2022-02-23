@@ -1,6 +1,7 @@
 package com.eleven.icode.algorithm.leetcode.array;
 
 import com.eleven.icode.algorithm.leetcode.entity.ListNode;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
 
 import java.util.*;
@@ -395,6 +396,172 @@ public class ArraySolution {
             res = res.next;
         }
         return head.next;
+    }
+
+    public int fib(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        if (n < 3) {
+            return 1;
+        }
+        return fib(n - 1) + fib(n - 2);
+    }
+
+    public int fibV2(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        if (n < 3) {
+            return 1;
+        }
+        int a = 1;
+        int b = 1;
+        int c = 0;
+        for (int i = 3; i <= n; i++) {
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return c;
+    }
+
+    public int fibV3(int n) {
+        return tailfab(1, 1, n);
+    }
+
+    public static int tailfab(int pre, int res, int n) {
+        if (n < 1) {
+            return 0;
+        }
+        if (n <= 2) {
+            return res;
+        }
+        return tailfab(res, pre + res, n - 1);
+    }
+
+    /**
+     * 1137. 第 N 个泰波那契数
+     */
+    public int tribonacci(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        if (n <= 2) {
+            return 1;
+        }
+        return tribonacci(n - 3) + tribonacci(n - 2) + tribonacci(n - 1);
+    }
+
+
+    public int tribonacciV2(int n) {
+        if (n < 1) {
+            return 0;
+        }
+        if (n <= 2) {
+            return 1;
+        }
+        int a = 0;
+        int b = 1;
+        int c = 1;
+        int d = 0;
+        for (int i = 3; i <= n; i++) {
+            d = a + b + c;
+            a = b;
+            b = c;
+            c = d;
+        }
+        return d;
+    }
+
+
+    public int tribonacciV3(int n) {
+        return tailTribonacci(0, 1, 1, n);
+    }
+
+    public int tailTribonacci(int a, int b, int c, int n) {
+        if (n < 1) {
+            return 0;
+        }
+        if (n <= 2) {
+            return c;
+        }
+        return tailTribonacci(b, c, a + b + c, n - 1);
+    }
+
+    /**
+     * 70. 爬楼梯
+     */
+    public int climbStairs(int n) {
+        int a = 0;
+        int b = 1;
+        int c = 0;
+        for (int i = 1; i <= n; i++) {
+            c = a + b;
+            a = b;
+            b = c;
+        }
+        return c;
+    }
+
+    /**
+     * 118. 杨辉三角
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> mid = new ArrayList<>();
+        mid.add(1);
+        res.add(mid);
+        if (numRows < 2) {
+            return res;
+        }
+        for (int i = 1; i < numRows; i++) {
+            List<Integer> up = res.get(i - 1);
+            mid = new ArrayList<>();
+            mid.add(1);
+            for (int k = 1; k < i; k++) {
+                mid.add(up.get(k) + up.get(k - 1));
+            }
+            mid.add(1);
+            res.add(mid);
+        }
+        return res;
+    }
+
+    /**
+     * 119. 杨辉三角 II
+     */
+    public List<Integer> getRow(int rowIndex) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i <= rowIndex; i++) {
+            List<Integer> mid = new ArrayList<>();
+            for (int k = 0; k <= i; k++) {
+                if (k == 0 || k == i) {
+                    mid.add(1);
+                } else {
+                    mid.add(res.get(i - 1).get(k) + res.get(i - 1).get(k - 1));
+                }
+            }
+            res.add(mid);
+        }
+        return res.get(rowIndex);
+    }
+
+
+    public List<Integer> getRowV2(int rowIndex) {
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        for (int i = 0; i <= rowIndex; ++i) {
+            List<Integer> row = new ArrayList<Integer>();
+            for (int j = 0; j <= i; ++j) {
+                if (j == 0 || j == i) {
+                    row.add(1);
+                } else {
+                    row.add(res.get(i - 1).get(j - 1) + res.get(i - 1).get(j));
+                }
+            }
+            res.add(row);
+        }
+        return res.get(rowIndex);
     }
 
     @Test
