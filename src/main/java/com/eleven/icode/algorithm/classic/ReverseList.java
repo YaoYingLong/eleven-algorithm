@@ -46,4 +46,14 @@ public class ReverseList {
         ListNode node_1 = recursion(node1);
         System.out.println(node_1);
     }
+
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = reverseList(head.next);
+        head.next.next = head;
+        head.next = null;
+        return newHead;
+    }
 }

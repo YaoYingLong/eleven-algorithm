@@ -37,12 +37,12 @@ public class LRUCache<K, V> {
         if (node == null) {
             return null;
         }
-        moveToFirst(node);
+        moveToFirst(node); // 将当前节点移动到链表头
         return node;
     }
 
     public void removeLast() {
-        if (tail != null) {
+        if (tail != null) { // 若链表尾部不为空
             tail = tail.prev;
             if (tail == null) {
                 head = null;
@@ -79,7 +79,11 @@ public class LRUCache<K, V> {
 
     private void moveToFirst(CacheNode node) {
         if (node == head) {
-            return;
+            return; // 若为头结点，则不需要做任何操作
+        }
+        if (head == null || tail == null) {
+            head = tail = node;
+            return; // 若链表为空
         }
         if (node.next != null) {
             node.next.prev = node.prev;
@@ -89,10 +93,6 @@ public class LRUCache<K, V> {
         }
         if (node == tail) {
             tail = node.prev;
-        }
-        if (head == null || tail == null) {
-            head = tail = node;
-            return;
         }
         node.next = head;
         head.prev = node;
