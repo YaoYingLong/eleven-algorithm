@@ -1,18 +1,11 @@
 package com.eleven.icode.algorithm.classic;
 
+import com.eleven.icode.algorithm.classic.entity.ListNode;
+
 /**
  * @author by YingLong on 2022/2/26
  */
 public class ReverseList {
-    static class ListNode {
-        int val;
-        ListNode next;
-
-        public ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
 
     public static ListNode iterate(ListNode head) {
         ListNode prev = null, curr, next;
