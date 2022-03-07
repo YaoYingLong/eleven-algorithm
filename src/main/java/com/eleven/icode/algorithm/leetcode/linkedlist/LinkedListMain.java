@@ -26,4 +26,18 @@ public class LinkedListMain {
         }
         return head.next;
     }
+
+    /**
+     * 剑指 Offer 24. 反转链表
+     */
+    public ListNode reverseList(ListNode head) {
+        ListNode tail = head, prev = null, next;
+        while (tail != null) {
+            next = tail.next;
+            tail.next = prev;
+            prev = tail;
+            tail = next;
+        }
+        return prev;
+    }
 }

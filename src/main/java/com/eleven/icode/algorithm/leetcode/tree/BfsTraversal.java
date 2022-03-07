@@ -4,6 +4,7 @@ import com.eleven.icode.algorithm.leetcode.entity.ListNode;
 import com.eleven.icode.algorithm.leetcode.entity.NTreeNode;
 import com.eleven.icode.algorithm.leetcode.entity.Node;
 import com.eleven.icode.algorithm.leetcode.entity.TreeNode;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.*;
 
@@ -724,5 +725,34 @@ public class BfsTraversal {
             }
         }
         return minSumLevel;
+    }
+
+    /**
+     * 105. 从前序与中序遍历序列构造二叉树
+     */
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            indexMap.put(inorder[i], i);
+        }
+        int len = inorder.length;
+        return bfsBuildTree(preorder, inorder, indexMap, 0, len - 1, 0, len - 1);
+    }
+
+    public TreeNode bfsBuildTree(int[] preorder, int[] inorder, Map<Integer, Integer> indexMap,
+                                 int preorderLeft, int preorderRight,
+                                 int inorderLeft, int inorderRight) {
+        if (preorderLeft > preorderRight) {
+            return null;
+        }
+        int rootVal = preorder[preorderLeft];
+        int rootIndex = indexMap.get(rootVal);
+        int leftSubTreeSize = rootIndex - inorderLeft;
+        TreeNode rootNode = new TreeNode(rootVal);
+        rootNode.left = bfsBuildTree(preorder, inorder, indexMap, preorderLeft + 1, preorderLeft + leftSubTreeSize,
+                inorderLeft, rootIndex - 1);
+        rootNode.right = bfsBuildTree(preorder, inorder, indexMap, preorderLeft + leftSubTreeSize + 1, preorderRight,
+                rootIndex + 1, inorderRight);
+        return rootNode;
     }
 }
