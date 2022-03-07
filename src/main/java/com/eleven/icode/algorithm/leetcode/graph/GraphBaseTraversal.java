@@ -10,10 +10,6 @@ public class GraphBaseTraversal {
     /**
      * 1557
      * 可以到达所有点的最少点数目
-     *
-     * @param n
-     * @param edges
-     * @return
      */
     public List<Integer> findSmallestSetOfVertices(int n, List<List<Integer>> edges) {
         int[] inDegree = new int[n];
@@ -33,10 +29,6 @@ public class GraphBaseTraversal {
     /**
      * 997
      * 找到小镇的法官
-     *
-     * @param N
-     * @param trust
-     * @return
      */
     public int findJudge(int N, int[][] trust) {
         int[] inDegree = new int[N + 1];
@@ -70,10 +62,6 @@ public class GraphBaseTraversal {
     /**
      * 1042
      * 不邻接植花
-     *
-     * @param N
-     * @param paths
-     * @return
      */
     public int[] gardenNoAdj(int N, int[][] paths) {
         int[] result = new int[N];
@@ -104,11 +92,6 @@ public class GraphBaseTraversal {
     /**
      * 1387
      * 将整数按权重排序
-     *
-     * @param lo
-     * @param hi
-     * @param k
-     * @return
      */
     public int getKth(int lo, int hi, int k) {
         TreeMap<Integer, List<Integer>> resultMap = new TreeMap<>();
@@ -156,7 +139,6 @@ public class GraphBaseTraversal {
      * @param C  - 矩阵的列
      * @param r0 - 矩阵中点的横坐标
      * @param c0 - 矩阵中点的纵坐标
-     * @return
      */
     public int[][] allCellsDistOrder(int R, int C, int r0, int c0) {
         int[][] ret = new int[R * C][];
@@ -179,9 +161,6 @@ public class GraphBaseTraversal {
      * <p>
      * 设图中有 N 个节点，在搜索时，如果我们到达了节点 N - 1，那么此时的路径就为 {N - 1}；
      * 否则如果我们到达了其它的节点 node，那么路径就为 {node} 加上 {所有从 nei 到 N - 1} 的路径集合，其中 nei 是 node 直接相邻的节点。
-     *
-     * @param graph
-     * @return
      */
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         return solve(graph, 0);
@@ -205,4 +184,37 @@ public class GraphBaseTraversal {
         }
         return ans;
     }
+
+    /**
+     * 54. 螺旋矩阵
+     */
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return res;
+        }
+        int top = 0, left = 0, right = matrix[0].length - 1, bottom = matrix.length - 1;
+        while (top <= bottom && left <= right) {
+            for (int i = left; i <= right; i++) {
+                res.add(matrix[top][i]);
+            }
+            for (int i = top + 1; i <= bottom; i++) {
+                res.add(matrix[i][right]);
+            }
+            if(top < bottom && left < right){
+                for (int i = right - 1; i > left; i--) {
+                    res.add(matrix[bottom][i]);
+                }
+                for (int i = bottom; i > top ; i--) {
+                    res.add(matrix[i][left]);
+                }
+            }
+            top++;
+            left++;
+            right--;
+            bottom--;
+        }
+        return res;
+    }
+
 }
