@@ -74,25 +74,15 @@ public class TreePath {
      * @param sum
      * @return
      */
-    public boolean hasPathSum(TreeNode root, int sum) {
+    public boolean hasPathSum(TreeNode root, int targetSum) {
         if (root == null) {
             return false;
         }
-
-        sum -= root.val;
-        if (sum == 0 && root.left == null && root.right == null) {
+        int sum = targetSum - root.val;
+        if (sum == 0 && root.left == null & root.right == null) {
             return true;
         }
-        boolean isPathSum = hasPathSum(root.left, sum);
-        if (isPathSum) {
-            return true;
-        }
-
-        isPathSum = hasPathSum(root.right, sum);
-        if (isPathSum) {
-            return true;
-        }
-        return false;
+        return hasPathSum(root.left, sum) || hasPathSum(root.right, sum);
     }
 
 }

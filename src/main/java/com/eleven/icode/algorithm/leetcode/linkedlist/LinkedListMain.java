@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.zip.CRC32;
 
 /**
  * @author by Eleven on 2022/3/4
@@ -101,5 +102,134 @@ public class LinkedListMain {
             tail = next;
         }
         return prev;
+    }
+
+    /**
+     * 19. 删除链表的倒数第 N 个结点
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        int nth = removeNthFromEndDfs(head, head.next, n);
+        return nth > 1 ? head.next : head;
+    }
+
+    public int removeNthFromEndDfs(ListNode before, ListNode curr, int n) {
+        if (curr == null) {
+            return n + 1;
+        }
+        int nth = removeNthFromEndDfs(curr, curr.next, n) - 1;
+        if (nth == 1) {
+            before.next = curr.next;
+        }
+        return nth;
+    }
+
+    public ListNode removeNthFromEndV2(ListNode head, int n) {
+        ListNode dummy = new ListNode(0, head);
+        ListNode first = head;
+        ListNode second = dummy;
+        for (int i = 0; i < n; ++i) {
+            first = first.next;
+        }
+        while (first != null) {
+            first = first.next;
+            second = second.next;
+        }
+        second.next = second.next.next;
+        ListNode ans = dummy.next;
+        return ans;
+    }
+
+    /**
+     * 141. 环形链表
+     */
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) {
+            return false;
+        }
+        ListNode slow = head, fast = head.next;
+        while (slow != fast) {
+            if (fast == null || fast.next == null) {
+                return false;
+            }
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return true;
+    }
+
+    /**
+     * 160. 相交链表
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+        ListNode pA = headA, pB = headB;
+        while (pA != pB) {
+            pA = pA == null ? headB : pA.next;
+            pB = pB == null ? headA : pB.next;
+        }
+        return pA;
+    }
+
+    /**
+     * 24. 两两交换链表中的节点
+     */
+    public ListNode swapPairs(ListNode head) {
+        ListNode preHead = new ListNode(-1), curr = preHead;
+        preHead.next = head;
+        while (curr.next != null && curr.next.next != null) {
+            ListNode node1 = curr.next;
+            ListNode node2 = curr.next.next;
+            curr.next = node2;
+            node1.next = node2.next;
+            node2.next = node1;
+            curr = node1;
+        }
+        return preHead.next;
+    }
+
+    public ListNode swapPairsV2(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = head.next;
+        head.next = swapPairsV2(newHead.next);
+        newHead.next = head;
+        return newHead;
+    }
+
+    public ListNode getKthFromEnd(ListNode head, int k) {
+        ListNode slow = head, fast = head;
+        for (int i = 0; i < k; i++) {
+            fast = fast.next;
+        }
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+
+    /**
+     * 82. 删除排序链表中的重复元素 II
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode dummy = new ListNode(0, head), cur = dummy;
+        while (cur.next != null && cur.next.next != null) {
+            if (cur.next.val == cur.next.next.val) {
+                int x = cur.next.val;
+                while (cur.next != null && cur.next.val == x) {
+                    cur.next = cur.next.next;
+                }
+            } else {
+                cur = cur.next;
+            }
+        }
+        return dummy.next;
     }
 }

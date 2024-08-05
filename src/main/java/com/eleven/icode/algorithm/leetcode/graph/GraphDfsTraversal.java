@@ -1,5 +1,7 @@
 package com.eleven.icode.algorithm.leetcode.graph;
 
+import javax.xml.transform.Result;
+import java.awt.datatransfer.ClipboardOwner;
 import java.util.*;
 
 /**
@@ -116,5 +118,50 @@ public class GraphDfsTraversal {
         }
     }
 
+    /**
+     * 79. 单词搜索
+     */
+    public boolean exist(char[][] board, String word) {
+        int h = board.length, w = board[0].length;
+        boolean[][] mark = new boolean[h][w];
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                boolean flag = dfs(board, mark, i, j, word, 0);
+                if (flag) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    int[][] next = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+    public boolean dfs(char[][] board, boolean[][] mark, int x, int y, String word, int index) {
+        if (board[x][y] != word.charAt(index)) {
+            return false;
+        }
+        if (index == word.length() - 1) {
+            return true;
+        }
+        mark[x][y] = true;
+        boolean result = false;
+        int h = board.length, w = board[0].length;
+        for (int i = 0; i < 4; i++) {
+            int nextx = x + next[i][0];
+            int nexty = y + next[i][1];
+            if (nextx < 0 || nexty < 0 || nextx > h - 1 || nexty > w - 1) {
+                continue;
+            }
+            if (!mark[nextx][nexty]) {
+                boolean flag = dfs(board, mark, nextx, nexty, word, index + 1);
+                if (flag) {
+                    result = true;
+                    break;
+                }
+            }
+        }
+        mark[x][y] = false;
+        return result;
+    }
 
 }

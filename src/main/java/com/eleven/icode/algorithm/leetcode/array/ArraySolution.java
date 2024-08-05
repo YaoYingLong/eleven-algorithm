@@ -1,7 +1,6 @@
 package com.eleven.icode.algorithm.leetcode.array;
 
 import com.eleven.icode.algorithm.leetcode.entity.ListNode;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
 
 import java.util.*;
@@ -81,15 +80,6 @@ public class ArraySolution {
             }
         }
         return left;
-    }
-
-    public int maxSubArray(int[] nums) {
-        int mid = 0, result = nums[0];
-        for (int i = 0; i < nums.length; i++) {
-            mid = Math.max(mid + nums[i], nums[i]);
-            result = Math.max(result, mid);
-        }
-        return result;
     }
 
     public int[] plusOne(int[] digits) {
@@ -567,5 +557,185 @@ public class ArraySolution {
     @Test
     public void test() {
         System.out.println(gcd(2, 3));
+    }
+
+    /**
+     * 440. 字典序的第K小数字
+     */
+    public int findKthNumber(int n, int k) {
+        int curr = 1;
+        k--;
+        while (k > 0) {
+            int step = getSteps(curr, n);
+            if (step <= k) {
+                k -= step;
+                curr++;
+            } else {
+                curr = curr * 10;
+                k--;
+            }
+        }
+        return curr;
+    }
+
+    public int getSteps(int curr, long n) {
+        int step = 0;
+        long first = curr;
+        long last = curr;
+        while (first <= n) {
+            step += Math.min(last, n) - first + 1;
+            first = first * 10;
+            last = last * 10 + 9;
+        }
+        return step;
+    }
+
+    /**
+     * 88. 合并两个有序数组
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int k = m + n - 1;
+        int p1 = m - 1, p2 = n - 1;
+        while (p1 > -1 && p2 > -1) {
+            if (nums1[p1] > nums2[p2]) {
+                nums1[k--] = nums1[p1--];
+            } else {
+                nums1[k--] = nums2[p2--];
+            }
+        }
+        while (p2 > -1) {
+            nums1[k--] = nums1[p2--];
+        }
+    }
+
+    /**
+     * 135. 分发糖果
+     */
+    public int candy(int[] ratings) {
+        int[] left = new int[ratings.length];
+        for (int i = 0; i < ratings.length; i++) {
+            if (i > 0 && ratings[i] > ratings[i - 1]) {
+                left[i] = left[i - 1] + 1;
+            } else {
+                left[i] = 1;
+            }
+        }
+
+//        int[] right = new int[ratings.length];
+        int res = 0;
+//        for (int i = ratings.length - 1; i >= 0; i--) {
+//            if (i < ratings.length - 1 && ratings[i] > ratings[i + 1]) {
+//                right[i] = right[i + 1] + 1;
+//            } else {
+//                right[i] = 1;
+//            }
+//            res += Math.max(right[i], left[i]);
+//        }
+        int right = 0;
+        for (int i = ratings.length - 1; i >= 0; i--) {
+            if (i < ratings.length - 1 && ratings[i] > ratings[i + 1]) {
+                right++;
+            } else {
+                right = 1;
+            }
+            res += Math.max(right, left[i]);
+        }
+        return res;
+    }
+
+    int segmentLen = 4;
+    int[] segments = new int[segmentLen];
+    List<String> res = new ArrayList<>();
+
+    public List<String> restoreIpAddresses(String s) {
+        dfs(s, 0, 0);
+        return res;
+    }
+
+    private void dfs(String s, int segId, int segIndex) {
+        if (segId == segmentLen) {
+            if (segIndex == s.length()) {
+                StringBuffer sb = new StringBuffer();
+                for (int i = 0; i < segmentLen; i++) {
+                    sb.append(segments[i]);
+                    if (i != segmentLen - 1) {
+                        sb.append(".");
+                    }
+                }
+                res.add(sb.toString());
+            }
+            return;
+        }
+
+        if (segIndex == s.length()) {
+            return;
+        }
+
+        if (s.charAt(segIndex) == '0') {
+            segments[segId] = 0;
+            dfs(s, segId + 1, segIndex + 1);
+        }
+
+        int seg = 0;
+        for (int i = segIndex; i < s.length(); i++) {
+            seg = seg * 10 + (s.charAt(i) - '0');
+            if (seg > 0 && seg <= 255) {
+                segments[segId] = seg;
+                dfs(s, segId + 1, i + 1);
+            } else {
+                break;
+            }
+        }
+    }
+
+    /**
+     * 739. 每日温度
+     */
+    public int[] dailyTemperatures(int[] temperatures) {
+        int len = temperatures.length;
+        int[] res = new int[len];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < res.length; i++) {
+            int temperature = temperatures[i];
+            while (!stack.isEmpty() && temperature > temperatures[stack.peek()]) {
+                int prevIndex = stack.pop();
+                res[prevIndex] = i - prevIndex;
+            }
+            stack.push(i);
+        }
+        return res;
+    }
+
+    /**
+     * 剑指 Offer 42. 连续子数组的最大和
+     */
+    public int maxSubArray(int[] nums) {
+        int mid = 0, max = nums[0];
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            mid = Math.max(mid + nums[i], nums[i]);
+            max = Math.max(max, mid);
+        }
+        return max;
+    }
+
+    /**
+     * 152. 乘积最大子数组
+     */
+    public int maxProduct(int[] nums) {
+        int len = nums.length;
+        int[] minF = new int[len];
+        int[] maxF = new int[len];
+        minF[0] = nums[0];
+        maxF[0] = nums[0];
+        for (int i = 1; i < len; i++) {
+            maxF[i] = Math.max(maxF[i - 1] * nums[i], Math.max(minF[i - 1] * nums[i], nums[i]));
+            minF[i] = Math.min(minF[i - 1] * nums[i], Math.min(maxF[i - 1] * nums[i], nums[i]));
+        }
+        int max = nums[0];
+        for (int i = 0; i < len; i++) {
+            max = Math.max(maxF[i], max);
+        }
+        return max;
     }
 }

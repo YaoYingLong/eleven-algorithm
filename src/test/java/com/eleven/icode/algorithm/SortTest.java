@@ -2,6 +2,11 @@ package com.eleven.icode.algorithm;
 
 import org.junit.Test;
 
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.*;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -199,5 +204,81 @@ public class SortTest {
             maxHeap(nums, 0, i);
         }
         return nums[0];
+    }
+
+    @Test
+    public void test() {
+        List<BigDecimal> nums = new ArrayList<>();
+        nums.add(BigDecimal.valueOf(1.1));
+        nums.add(BigDecimal.valueOf(2.1));
+        nums.add(BigDecimal.valueOf(3.1));
+        nums.add(BigDecimal.valueOf(4.1));
+        BigDecimal summedReadings = nums.stream().reduce(BigDecimal.ZERO, (reading, accumulator) -> reading.add(accumulator));
+        System.out.println(summedReadings.doubleValue());
+        BigDecimal avgReadings = summedReadings.divide(BigDecimal.valueOf(nums.size()), RoundingMode.HALF_UP);
+        System.out.println(avgReadings.doubleValue());
+    }
+
+    public static void main(String[] args) {
+        // 随便虚拟一个日期
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("当前日期: " + now + " " + now.getDayOfWeek());
+        // 求这个日期上一周的周一、周日
+        LocalDateTime todayOfLastWeek = now.minusDays(7);
+        LocalDateTime monday = todayOfLastWeek.with(TemporalAdjusters.previous(DayOfWeek.SUNDAY)).plusDays(1);
+        LocalDateTime sunday = todayOfLastWeek.with(TemporalAdjusters.next(DayOfWeek.MONDAY)).minusDays(1);
+        System.out.println("当前日期：" + now + " 上一周的周一：" + monday + " " + monday.getDayOfWeek());
+        System.out.println("当前日期：" + now + " 上一周的周日：" + sunday + " " + sunday.getDayOfWeek());
+
+
+        Instant mondayDateTime = now.toInstant(ZoneOffset.UTC);
+        System.out.println("当前日期: " + mondayDateTime + " " + now.getDayOfWeek());
+        mondayDateTime.atOffset(ZoneOffset.UTC).toLocalDate();
+    }
+
+
+    public String add(String param1, String param2) {
+        int len1 = param1.length() - 1;
+        int len2 = param2.length() - 1;
+
+        int k = 0;
+        String res = "";
+        while (len1 > -1 || len2 > -1) {
+            int a = deCode(len1 > -1 ? param1.charAt(len1--) : 0);
+            int b = deCode(len2 > -1 ? param2.charAt(len2--) : 0);
+            int temp = a + b + k;
+            k = temp / 62;
+            res = enCode(temp % 62) + res;
+        }
+        return k == 1 ? 1 + res : res;
+    }
+
+    private int deCode(int a) {
+        if (a >= '0' && a <= '9') {
+            a -= '0';
+        } else if (a >= 'a' && a <= 'z') {
+            a = a - 'a' + 10;
+        }else if (a >= 'A' && a <= 'Z') {
+            a = a - 'A' + 36;
+        }
+        return a;
+    }
+
+    private char enCode(int a) {
+        if (a < 10) {
+            return (char) (a + '0');
+        } else if (a > 9 && a < 36) {
+            return (char) (a - 10 + 'a');
+        } else {
+            return (char) (a - 36 + 'A');
+        }
+
+    }
+
+    @Test
+    public void test00001() {
+        System.out.println(add("a", "1"));
+        System.out.println(add("Z", "1"));
+        System.out.println(add("19", "1"));
     }
 }
